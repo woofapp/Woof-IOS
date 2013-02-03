@@ -286,21 +286,15 @@
 -(void) insertCheckinWith:(NSString *) idArea andIdUser:(NSString *) idUser andIdDog:(NSString *) idDog andDate:(NSString *) date{
     NSMutableString *insertSQL = [[NSMutableString alloc]initWithFormat:@"INSERT INTO checkins (idArea, idUser, idDog, date) VALUES(%@, %@, %@, '%@')", idArea, idUser, idDog, date];
     
-    NSLog(@"error: %@", [db lastErrorMessage]);
     [db executeUpdate:insertSQL];
 }
 
 -(int) getUserNCheckins:(NSString *) idUser{
-    NSMutableString *selectSQL = [[NSMutableString alloc]initWithFormat:@"SELECT * FROM checkins WHERE idUser = %@", idUser];
+    NSMutableString *selectSQL = [[NSMutableString alloc]initWithFormat:@"SELECT COUNT(DISTINCT(iduser || date || idarea)) AS count FROM checkins WHERE idUser = %@", idUser];
+    
     FMResultSet *rs = [db executeQuery:selectSQL];
-    int count = 0;
-    while([rs next]){
-        count = count + 1;
-    }
-    NSLog(@"%@", selectSQL);
-    NSLog(@"error: %@", [db lastErrorMessage]);
-    NSLog(@"count: %d", count);
-    return [rs columnCount];
+    [rs next];
+    return [rs intForColumn:@"count"];
 }
 
 /*

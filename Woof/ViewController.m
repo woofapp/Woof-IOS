@@ -70,6 +70,7 @@
 }
 
 - (IBAction)loginButtonClick:(id)sender {
+    NSLog(@"email: %@", emailText.text);
     if ([emailText.text isEqualToString:@""] || [passwordText.text isEqualToString:@""]) {
         UIAlertView * alert = [[UIAlertView alloc] initWithTitle:nil message:@"Inserire username e password per il login!" delegate:self cancelButtonTitle:@"Hide" otherButtonTitles:nil];
         alert.alertViewStyle = UIAlertViewStyleDefault;
@@ -107,7 +108,7 @@
         [DataSource setLoginDefaultsWith:emailText.text andPassword:passwordText.text andToken:token];
         // getUserInfo e salva nel db
         User * user = [AccountManager getUserInfoWith:token andEmail:emailText.text];
-        NSLog(@"NUMERO LOGIN: %d", [AccountManager getUserNCheckinsWith:token andIdUser:user.idUser]);
+        [AccountManager getUserNCheckinsWith:token andIdUser:user.idUser];
         //passa alla home
         [self performSegueWithIdentifier:@"splashToHome" sender:self];
     }
@@ -119,6 +120,9 @@
     UIAlertView * alert = [[UIAlertView alloc] initWithTitle:nil message:@"Email e/o password errati!" delegate:self cancelButtonTitle:@"Hide" otherButtonTitles:nil];
     alert.alertViewStyle = UIAlertViewStyleDefault;
     [alert show];
+    
+    //visualizza il form
+    [self fadeIn:formContainer withDuration:1 andWait:0];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
