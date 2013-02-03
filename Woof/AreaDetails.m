@@ -10,6 +10,8 @@
 #import "AreaManager.h"
 #import "Base64.h"
 #import "MiniGalleryCell.h"
+#import "Comment.h"
+#import "FormatText.h"
 
 @interface AreaDetails ()
 
@@ -18,7 +20,12 @@
 @implementation AreaDetails
 
 @synthesize area, areaImagesIds, miniGalleryCache, galleryMessage;
-@synthesize miniGallery, scrollImageMessageView, scrollImageMessage, areaAddressLabel, ratingImageView, nRatingLabel;
+@synthesize titleLabel,miniGallery, scrollImageMessageView, scrollImageMessage, areaAddressLabel, ratingImageView, nRatingLabel, totalCheckinLabel, noImageMessageContainer, contentScrollView, commentContainer1, commentContainer2, noCommentsMessage, commentsControlMenu;
+//Comments
+@synthesize userNameSurname1,userImage1,userComment1,commentDate1,userNameSurname2,userComment2,commentDate2, userImage2;
+
+//Rating
+@synthesize ratingBackgroundView,starsContainer,userRatingChoice;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,12 +42,91 @@
     
     [self performSelectorInBackground:@selector(downloadNumberOfImage:) withObject:[area myIdArea]];
     
+    [titleLabel setFont:[UIFont fontWithName:@"Opificio" size:20]];
+    
     areaAddressLabel.text = [area myAddress];
     
     [self setImageRating:ceil([area myRating])];
     
     nRatingLabel.text = [NSString stringWithFormat:@"(%d)",[area myNRating]];
     
+    totalCheckinLabel.text = [NSString stringWithFormat:@"%d",[[area myCheckins] count]];
+}
+
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+    [contentScrollView setScrollEnabled:YES];
+    contentScrollView.frame = CGRectMake(0, 43, 320, [UIScreen mainScreen].bounds.size.height - 40);
+    
+    /*
+     * Setting dei commenti
+     */
+    switch ([area.myComments count]) {
+        case 1:
+            [self showComment:1 with:area.myComments[0]];
+            commentContainer1.alpha = 1;
+            commentsControlMenu.frame = CGRectMake(0, 105, 320, 35);
+            commentsControlMenu.alpha = 1;
+            [self resizeScrollViewHeight: 560];
+            break;
+        case 2:
+            [self showComment:1 with:area.myComments[0]];
+            [self showComment:2 with:area.myComments[1]];
+            commentContainer1.alpha = 1;
+            commentContainer2.alpha = 1;
+            commentsControlMenu.frame = CGRectMake(0, 180, 320, 35);
+            commentsControlMenu.alpha = 1;
+            [self resizeScrollViewHeight: 630];
+            break;
+            
+        default:
+            noCommentsMessage.alpha = 1;
+            [self resizeScrollViewHeight: 520];
+            break;
+    }
+    
+    ratingBackgroundView.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha:0.5];
+}
+
+-(void) resizeScrollViewHeight: (int) height{
+    [contentScrollView setContentSize:CGSizeMake(320, height)];
+}
+
+-(void) showComment: (int)container with:(Comment*)comment{
+    
+    NSString *text = [FormatText formatComment:comment.text withQuotes:NO];
+    NSString *nameSurname = [FormatText toUpperEveryFirstChar:[[comment.user.name stringByAppendingString:@" "] stringByAppendingString:comment.user.surname]];
+    UIImage *image = [self convertStringToImage:comment.user.image];
+    NSString *date = [FormatText formatDate:comment.date];
+    
+    if(container == 1){
+        userNameSurname1.text = nameSurname;
+        commentDate1.text = date;
+        userComment1.text = text;
+        [userComment1 sizeToFit];
+        userImage1.image = image;
+    }else if(container == 2){
+        userNameSurname2.text = nameSurname;
+        commentDate2.text = date;
+        userComment2.text = text;
+        [userComment2 sizeToFit];
+        userImage2.image = image;
+    }
+    
+}
+
+-(UIImage*)convertStringToImage:(NSString *)string{
+    [Base64 initialize];
+    
+    NSData* image = [Base64 decode:string];
+    
+    UIImage *img = NULL;
+    
+    if(image != NULL) img = [UIImage imageWithData:image];
+    else img = [UIImage imageNamed: @"no_personal_image.png"];
+    
+    return img;
 }
 
 - (void)setImageRating: (int)rating{
@@ -77,9 +163,17 @@
             [ratingImageView setImage:stars5];
             break;
     }
+    
+    //Set touch event
+    UITapGestureRecognizer *ratingImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSendRating)];
+    [ratingImageViewTap setNumberOfTouchesRequired:1];
+    [ratingImageViewTap setNumberOfTapsRequired:1];
+    [ratingImageViewTap setDelegate:self];
+    [ratingImageView addGestureRecognizer:ratingImageViewTap];
 }
 
-- (void) viewDidAppear:(BOOL)animated{
+-(void)showSendRating{
+    [self fadeIn:ratingBackgroundView withDuration:1 andWait:0];
 }
 
 -(void) viewDidDisappear:(BOOL)animated{
@@ -104,9 +198,44 @@
         galleryMessage = [NSMutableString stringWithFormat:@"Foto 1/%d",[areaImagesIds count]];
         scrollImageMessage.text = galleryMessage;
         scrollImageMessageView.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha:0.5];
+        [miniGallery reloadData];
+    }else{
+        miniGallery.alpha = 0;
+        noImageMessageContainer.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha:0.5];
+        
     }
-    [miniGallery reloadData];
+    
 }
+
+//effetto transizione di uscita
+-(void)fadeOut:(UIView*)viewToDissolve withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
+{
+    [UIView beginAnimations: @"Fade Out" context:nil];
+    
+    // wait for time before begin
+    [UIView setAnimationDelay:wait];
+    
+    // druation of animation
+    [UIView setAnimationDuration:duration];
+    viewToDissolve.alpha = 0.0;
+    [UIView commitAnimations];
+}
+
+//effetto transizione di entrata
+-(void)fadeIn:(UIView*)viewToFadeIn withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
+{
+    [UIView beginAnimations: @"Fade In" context:nil];
+    
+    // wait for time before begin
+    [UIView setAnimationDelay:wait];
+    
+    // druation of animation
+    [UIView setAnimationDuration:duration];
+    viewToFadeIn.alpha = 1;
+    [UIView commitAnimations];
+    
+}
+
 
 /*
  * GESTIONE TABLE VIEW
@@ -158,6 +287,15 @@
     return 170;
 }
 
+- (IBAction)sendRating:(id)sender {
+    //Invio rating dell'utente
+    
+}
+
+- (IBAction)hideSendRating:(id)sender {
+    [self fadeOut:ratingBackgroundView withDuration:1 andWait:0];
+}
+
 - (IBAction)goToSearchArea:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -177,4 +315,14 @@
                              MKLaunchOptionsDirectionsModeKey, nil];
     [MKMapItem openMapsWithItems: items launchOptions: options];
 }
+
+
+/*
+ * GESTIONE RATING POPUP
+ */
+-(void)newRating:(DLStarRatingControl *)control :(float)rating {
+    userRatingChoice = rating;
+}
+
+
 @end

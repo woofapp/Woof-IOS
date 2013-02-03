@@ -138,8 +138,6 @@
 }
 
 - (IBAction)goToHome:(id)sender {
-    //Rimuovo dagli observer della locatione
-    [mapView.userLocation removeObserver:self forKeyPath:@"location"];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
@@ -327,8 +325,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if([[[areas objectAtIndex:[indexPath indexAtPosition:[indexPath length] -1]] myComments] count] == 0 )return 140;
-    
+    if([[[areas objectAtIndex:[indexPath indexAtPosition:[indexPath length] -1]] myComments] count] == 0 ) return 140;
     return 224;
 }
 

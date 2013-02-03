@@ -10,10 +10,12 @@
 #import "Comment.h"
 #import "AreaManager.h"
 #import "Base64.h"
+#import "FormatText.h"
+
 
 @implementation AreaCell
 
-@synthesize addressLabel, ratingImage, nRatingLabel, distanceLabel, commentContainer, commentLabel, userCommentImage, userCommentNameLabel, container, areaImageView, cache, idArea;
+@synthesize addressLabel, ratingImage, nRatingLabel, distanceLabel, commentContainer, commentLabel, userCommentImage, userCommentNameLabel, container, areaImageView, cache, idArea, nTryToDownload;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -33,25 +35,43 @@
 
 -(void)populateWith: (Area *)area andImageCache: (NSMutableDictionary *)imageCache{
     
+    self.nTryToDownload = 1;
+    
     addressLabel.text = [area myAddress];
     self.cache = imageCache;
     self.idArea = [area myIdArea];
     
+    
     if(![[cache allKeys] containsObject:idArea]){
         areaImageView.image = [UIImage imageNamed: @"downloading_area_image.jpg"];
         [self performSelectorInBackground:@selector(downloadLastAreaImage:) withObject:idArea];
-    
-    }else if([[cache objectForKey:idArea] isKindOfClass:[UIImage class]])
-        areaImageView.image = [cache objectForKey:idArea];
-    
-    else if([[cache objectForKey:idArea] isKindOfClass:[NSString class]]){
+    }else if([[cache objectForKey:idArea] isEqualToString:@"defaultAreaImage@2.png"]){
+        areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
+        
+    }else{
         [Base64 initialize];
         NSData* data = [Base64 decode:[cache objectForKey:idArea]];
-        if(data != nil)
-            areaImageView.image = [UIImage imageWithData:data];
+        if(data != NULL) areaImageView.image = [UIImage imageWithData:data];
+
     }
     
-    int rating = ceil([area myRating]);
+    [self setRating:area.myRating];
+    
+    nRatingLabel.text = [NSString stringWithFormat:@"(%d)",[area myNRating]];
+    
+    if (area.myDistance > 1000) distanceLabel.text = [NSString stringWithFormat:@"%.2f Km",area.myDistance/1000];
+    else distanceLabel.text = [NSString stringWithFormat:@"%.2f m",area.myDistance];
+    
+    if([[area myComments] count] == 0){
+        [self hideCommentContainer];
+    }else{
+        [self showComment:[[area myComments] objectAtIndex:0]];
+        
+    }
+}
+
+-(void)setRating: (double)rat{
+    int rating = ceil(rat);
     
     UIImage *noStars = [UIImage imageNamed: @"stars@2.png"];
     UIImage *stars1 = [UIImage imageNamed: @"stars1@2.png"];
@@ -85,26 +105,38 @@
             [ratingImage setImage:stars5];
             break;
     }
+}
+
+-(void)hideCommentContainer{
+    commentContainer.frame = CGRectMake(0,0,0,0);
+    commentContainer.alpha = 0;
+    self.frame = CGRectMake(0,0,320,130);
+    container.frame = CGRectMake(10,5,300,130);
+}
+
+-(void)showComment: (Comment *)comment{
+    commentContainer.frame = CGRectMake(1,130,298,74);
+    commentContainer.alpha = 1;
+    self.frame = CGRectMake(0,0,320,224);
+    container.frame = CGRectMake(10,5,300,205);
     
-    nRatingLabel.text = [NSString stringWithFormat:@"(%d)",[area myNRating]];
+    commentLabel.text = [FormatText formatComment:comment.text withQuotes:YES];
+    userCommentNameLabel.text = [FormatText toUpperEveryFirstChar:[NSString stringWithFormat:@"%@ %@",[[comment user]name], [[comment user] surname]]];
     
-    if (area.myDistance > 1000) distanceLabel.text = [NSString stringWithFormat:@"%.2f Km",area.myDistance/1000];
-    else distanceLabel.text = [NSString stringWithFormat:@"%.2f m",area.myDistance];
     
-    if([[area myComments] count] == 0){
-        commentContainer.frame = CGRectMake(0,0,0,0);
-        commentContainer.alpha = 0;
-        self.frame = CGRectMake(0,0,320,130);
-        container.frame = CGRectMake(10,5,300,130);
-    }else{
-        Comment *comment = [[area myComments] objectAtIndex:0];
-        commentLabel.text = comment.text;
-        userCommentNameLabel.text = [NSString stringWithFormat:@"%@ %@",[[comment user]name], [[comment user] surname]];
+    //immagine utente
+    UIImage *userImg;
+    
+    if(comment.user.image != NULL){
+        [Base64 initialize];
+        NSData* image = [Base64 decode:comment.user.image];
         
-        //immagine utente
-        UIImage *userImg = [[comment user] getImageFromB64String];
-        if(userImg != nil) [userCommentImage setImage:userImg];
-    }
+        if(image != NULL) userImg = [UIImage imageWithData:image];
+        else userImg = [UIImage imageNamed: @"no_personal_image.png"];
+        
+    }else userImg = [UIImage imageNamed: @"no_personal_image.png"];
+    
+    userCommentImage.image = userImg;
 }
 
 - (void)downloadLastAreaImage: (NSString*) idA{
@@ -118,18 +150,22 @@
 
 - (void)downloadImageCompletedWithData: (NSString *)image{
     
-    if(image != nil){
-        
+    if([image length] > 0) {
         [Base64 initialize];
         NSData* data = [Base64 decode:image];
-        if(data != nil)
-            [self.cache setObject:image forKey:idArea]; //aggiungo immagine alla cache
-        
-        areaImageView.image = [UIImage imageWithData:data];
-        
+        if(data != NULL) {
+            [self.cache setObject:image forKey:idArea];
+            areaImageView.image = [UIImage imageWithData:data];
+        }else{
+            if(nTryToDownload <=3){
+                nTryToDownload++;
+                [self performSelectorInBackground:@selector(downloadLastAreaImage:) withObject:idArea];
+            }else
+                areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
+        }
     }else{
+        [self.cache setObject:@"defaultAreaImage@2.png" forKey:idArea];
         areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
-        [self.cache setObject:[UIImage imageNamed: @"defaultAreaImage@2.png"] forKey:idArea];
     }
 }
 

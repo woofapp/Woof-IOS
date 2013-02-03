@@ -199,7 +199,7 @@
 												<int key="IBUITag">6</int>
 												<bool key="IBUIUserInteractionEnabled">NO</bool>
 												<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-												<string key="IBUIText">" Commento bla bla bla bla jansddaslasdlasdj asdjlkasjdlk...."</string>
+												<string key="IBUIText">" aaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"</string>
 												<object class="NSColor" key="IBUITextColor" id="87177568">
 													<int key="NSColorSpace">1</int>
 													<bytes key="NSRGB">MCAwIDAAA</bytes>
@@ -219,7 +219,6 @@
 												<string key="NSFrame">{{58, 44}, {239, 21}}</string>
 												<reference key="NSSuperview" ref="677972978"/>
 												<reference key="NSWindow"/>
-												<reference key="NSNextKeyView"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
 												<bool key="IBUIOpaque">NO</bool>
 												<bool key="IBUIClipsSubviews">YES</bool>
@@ -233,11 +232,13 @@
 												<int key="IBUIBaselineAdjustment">0</int>
 												<float key="IBUIMinimumFontSize">10</float>
 												<object class="IBUIFontDescription" key="IBUIFontDescription">
-													<int key="type">1</int>
+													<string key="name">Helvetica-Bold</string>
+													<string key="family">Helvetica</string>
+													<int key="traits">2</int>
 													<double key="pointSize">13</double>
 												</object>
 												<object class="NSFont" key="IBUIFont">
-													<string key="NSName">Helvetica</string>
+													<string key="NSName">Helvetica-Bold</string>
 													<double key="NSSize">13</double>
 													<int key="NSfFlags">16</int>
 												</object>
@@ -274,7 +275,7 @@
 												</object>
 											</object>
 										</array>
-										<string key="NSFrame">{{0, 130}, {300, 75}}</string>
+										<string key="NSFrame">{{1, 130}, {298, 74}}</string>
 										<reference key="NSSuperview" ref="709485139"/>
 										<reference key="NSWindow"/>
 										<reference key="NSNextKeyView" ref="826567868"/>
@@ -294,7 +295,7 @@
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
-									<bytes key="NSRGB">MC44IDAuOCAwLjgAA</bytes>
+									<bytes key="NSRGB">MC40IDAuNCAwLjQAA</bytes>
 								</object>
 								<int key="IBUITag">11</int>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>

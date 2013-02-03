@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *areaImageView;
 @property (retain, nonatomic) NSMutableDictionary *cache;
 @property (retain, nonatomic) NSString *idArea;
+@property (nonatomic) int nTryToDownload;
+
 
 -(void)populateWith: (Area *)area andImageCache: (NSMutableDictionary *)imageCache;
 
