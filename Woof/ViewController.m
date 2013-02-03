@@ -43,8 +43,6 @@
 }
 
 -(void) checkLogin{
-    [self switchToHome];
-    
     
     //Check login
     if([DataSource getTokenDefault] == NULL) [self fadeIn:loginViewContainer withDuration:1 andWait:0];
