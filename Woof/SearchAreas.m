@@ -13,6 +13,7 @@
 #import "AreaCell.h"
 #import "Comment.h"
 #import "AreaDetails.h"
+#import "UIEffects.h"
 
 @interface SearchAreas ()
 
@@ -143,44 +144,15 @@
 
 - (IBAction)switchView:(id)sender {
     if(tableViewContainer.alpha == 0){
-        [self fadeOut:mapViewContainer withDuration:1 andWait:0];
-        [self fadeIn:tableViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeOut:mapViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeIn:tableViewContainer withDuration:1 andWait:0];
         
     }else if(mapViewContainer.alpha == 0){
-        [self fadeOut:tableViewContainer withDuration:1 andWait:0];
-        [self fadeIn:mapViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeOut:tableViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeIn:mapViewContainer withDuration:1 andWait:0];
         
         [self mapZoomInLocation:searchedLocation];
     }
-}
-
-//effetto transizione di uscita
--(void)fadeOut:(UIView*)viewToDissolve withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade Out" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToDissolve.alpha = 0.0;
-    [UIView commitAnimations];
-}
-
-//effetto transizione di entrata
--(void)fadeIn:(UIView*)viewToFadeIn withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade In" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToFadeIn.alpha = 1;
-    [UIView commitAnimations];
-    
 }
 
 /*
@@ -254,14 +226,14 @@
 }
 
 - (IBAction)radiusButtonClicked:(id)sender {
-    [self fadeIn:closePickerButton withDuration:1 andWait:0];
-    [self fadeIn:picker withDuration:1 andWait:0];
+    [UIEffects fadeIn:closePickerButton withDuration:1 andWait:0];
+    [UIEffects fadeIn:picker withDuration:1 andWait:0];
 }
 
 //Chiusura del picker e aggiornamento della scelta
 - (IBAction)closePickerButtonClicked:(id)sender {
-    [self fadeOut:closePickerButton withDuration:1 andWait:0];
-    [self fadeOut:picker withDuration:1 andWait:0];
+    [UIEffects fadeOut:closePickerButton withDuration:1 andWait:0];
+    [UIEffects fadeOut:picker withDuration:1 andWait:0];
     
     if(selectedRadiusString == NULL) selectedRadiusString = @"100m";
     [radiusButton setTitle:selectedRadiusString forState:UIControlStateNormal];

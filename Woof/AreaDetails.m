@@ -8,10 +8,11 @@
 
 #import "AreaDetails.h"
 #import "AreaManager.h"
-#import "Base64.h"
 #import "MiniGalleryCell.h"
 #import "Comment.h"
 #import "FormatText.h"
+#import "ImageUtility.h"
+#import "UIEffects.h"
 
 @interface AreaDetails ()
 
@@ -117,16 +118,12 @@
 }
 
 -(UIImage*)convertStringToImage:(NSString *)string{
-    [Base64 initialize];
     
-    NSData* image = [Base64 decode:string];
+    UIImage *image = [ImageUtility decodeBase64Image:string];
     
-    UIImage *img = NULL;
+    if(image == NULL) image = [UIImage imageNamed: @"no_personal_image.png"];
     
-    if(image != NULL) img = [UIImage imageWithData:image];
-    else img = [UIImage imageNamed: @"no_personal_image.png"];
-    
-    return img;
+    return image;
 }
 
 - (void)setImageRating: (int)rating{
@@ -173,7 +170,7 @@
 }
 
 -(void)showSendRating{
-    [self fadeIn:ratingBackgroundView withDuration:1 andWait:0];
+    [UIEffects fadeIn:ratingBackgroundView withDuration:1 andWait:0];
 }
 
 -(void) viewDidDisappear:(BOOL)animated{
@@ -204,35 +201,6 @@
         noImageMessageContainer.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha:0.5];
         
     }
-    
-}
-
-//effetto transizione di uscita
--(void)fadeOut:(UIView*)viewToDissolve withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade Out" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToDissolve.alpha = 0.0;
-    [UIView commitAnimations];
-}
-
-//effetto transizione di entrata
--(void)fadeIn:(UIView*)viewToFadeIn withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade In" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToFadeIn.alpha = 1;
-    [UIView commitAnimations];
     
 }
 
@@ -293,7 +261,7 @@
 }
 
 - (IBAction)hideSendRating:(id)sender {
-    [self fadeOut:ratingBackgroundView withDuration:1 andWait:0];
+    [UIEffects fadeOut:ratingBackgroundView withDuration:1 andWait:0];
 }
 
 - (IBAction)goToSearchArea:(id)sender {

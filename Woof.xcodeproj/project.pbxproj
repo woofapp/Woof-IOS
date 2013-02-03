@@ -109,6 +109,8 @@
 		708D401A16BEB760006854EB /* star_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D401416BEB760006854EB /* star_highlighted@2x.png */; };
 		708D401B16BEB760006854EB /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D401516BEB760006854EB /* star.png */; };
 		708D401C16BEB760006854EB /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 708D401616BEB760006854EB /* star@2x.png */; };
+		70F9DD3616BED6CD00380014 /* ImageUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F9DD3516BED6CD00380014 /* ImageUtility.m */; };
+		70F9DD3A16BEE43400380014 /* UIEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F9DD3916BEE43400380014 /* UIEffects.m */; };
 		B37F311A16BC256000E4C5B5 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B37F311916BC256000E4C5B5 /* Dog.m */; };
 		B3BDB48916BBFA9900C72992 /* FormValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BDB48816BBFA9900C72992 /* FormValidator.m */; };
 		B3BDB48C16BC0B6200C72992 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BDB48B16BC0B6200C72992 /* Utility.m */; };
@@ -272,6 +274,10 @@
 		708D401416BEB760006854EB /* star_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star_highlighted@2x.png"; sourceTree = "<group>"; };
 		708D401516BEB760006854EB /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
 		708D401616BEB760006854EB /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "star@2x.png"; sourceTree = "<group>"; };
+		70F9DD3416BED6CD00380014 /* ImageUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtility.h; sourceTree = "<group>"; };
+		70F9DD3516BED6CD00380014 /* ImageUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtility.m; sourceTree = "<group>"; };
+		70F9DD3816BEE43400380014 /* UIEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIEffects.h; sourceTree = "<group>"; };
+		70F9DD3916BEE43400380014 /* UIEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIEffects.m; sourceTree = "<group>"; };
 		B37F311816BC256000E4C5B5 /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
 		B37F311916BC256000E4C5B5 /* Dog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
 		B3BDB48716BBFA9900C72992 /* FormValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormValidator.h; sourceTree = "<group>"; };
@@ -702,6 +708,8 @@
 		7085431316B7C639005A84ED /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				70F9DD3716BEE41900380014 /* UIEffects */,
+				70F9DD3216BED6A600380014 /* ImageUtility */,
 				708D3FF816BEB4F0006854EB /* DLStarRating */,
 				B3BDB48616BBFA6300C72992 /* FormatText */,
 				7085431416B7C642005A84ED /* Crypto */,
@@ -773,6 +781,24 @@
 				708D401616BEB760006854EB /* star@2x.png */,
 			);
 			name = DIStarRating;
+			sourceTree = "<group>";
+		};
+		70F9DD3216BED6A600380014 /* ImageUtility */ = {
+			isa = PBXGroup;
+			children = (
+				70F9DD3416BED6CD00380014 /* ImageUtility.h */,
+				70F9DD3516BED6CD00380014 /* ImageUtility.m */,
+			);
+			name = ImageUtility;
+			sourceTree = "<group>";
+		};
+		70F9DD3716BEE41900380014 /* UIEffects */ = {
+			isa = PBXGroup;
+			children = (
+				70F9DD3816BEE43400380014 /* UIEffects.h */,
+				70F9DD3916BEE43400380014 /* UIEffects.m */,
+			);
+			name = UIEffects;
 			sourceTree = "<group>";
 		};
 		B3BDB48616BBFA6300C72992 /* FormatText */ = {
@@ -946,6 +972,8 @@
 				708D400016BEB4FF006854EB /* DLStarView.m in Sources */,
 				708D400116BEB4FF006854EB /* UIView+Subviews.m in Sources */,
 				708D400A16BEB613006854EB /* ReportArea.m in Sources */,
+				70F9DD3616BED6CD00380014 /* ImageUtility.m in Sources */,
+				70F9DD3A16BEE43400380014 /* UIEffects.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

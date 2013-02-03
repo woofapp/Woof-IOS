@@ -9,8 +9,8 @@
 #import "AreaCell.h"
 #import "Comment.h"
 #import "AreaManager.h"
-#import "Base64.h"
 #import "FormatText.h"
+#import "ImageUtility.h"
 
 
 @implementation AreaCell
@@ -49,10 +49,7 @@
         areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
         
     }else{
-        [Base64 initialize];
-        NSData* data = [Base64 decode:[cache objectForKey:idArea]];
-        if(data != NULL) areaImageView.image = [UIImage imageWithData:data];
-
+        areaImageView.image = [ImageUtility decodeBase64Image:[cache objectForKey:idArea]];
     }
     
     [self setRating:area.myRating];
@@ -127,14 +124,8 @@
     //immagine utente
     UIImage *userImg;
     
-    if(comment.user.image != NULL){
-        [Base64 initialize];
-        NSData* image = [Base64 decode:comment.user.image];
-        
-        if(image != NULL) userImg = [UIImage imageWithData:image];
-        else userImg = [UIImage imageNamed: @"no_personal_image.png"];
-        
-    }else userImg = [UIImage imageNamed: @"no_personal_image.png"];
+    if(comment.user.image != NULL) userImg = [ImageUtility decodeBase64Image:comment.user.image];
+    else userImg = [UIImage imageNamed: @"no_personal_image.png"];
     
     userCommentImage.image = userImg;
 }
@@ -151,11 +142,12 @@
 - (void)downloadImageCompletedWithData: (NSString *)image{
     
     if([image length] > 0) {
-        [Base64 initialize];
-        NSData* data = [Base64 decode:image];
-        if(data != NULL) {
+        
+        UIImage *img = [ImageUtility decodeBase64Image:image];
+
+        if(img != NULL) {
             [self.cache setObject:image forKey:idArea];
-            areaImageView.image = [UIImage imageWithData:data];
+            areaImageView.image = img;
         }else{
             if(nTryToDownload <=3){
                 nTryToDownload++;

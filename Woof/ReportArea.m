@@ -8,6 +8,8 @@
 
 #import "ReportArea.h"
 #import "SearchedLocationPoint.h"
+#import "ImageUtility.h"
+#import "UIEffects.h"
 
 @interface ReportArea ()
 
@@ -16,7 +18,7 @@
 @implementation ReportArea
 
 @synthesize userLocation,searchedLocation, area, geoCoder;
-@synthesize mapViewContainer, mapView, mapAddressSelectedTextField, addressSelectedTextField, selectImageMessageContainer;
+@synthesize mapViewContainer, mapView, mapAddressSelectedTextField, addressSelectedTextField, selectImageMessageContainer, ratingImageView, userRatingChoice, ratingView, commentTextView;
 
 //Selezione immagine
 @synthesize picker, selectedImage;
@@ -44,6 +46,13 @@
     
     picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
+    
+    //Set touch event
+    UITapGestureRecognizer *ratingImageViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showSendRating)];
+    [ratingImageViewTap setNumberOfTouchesRequired:1];
+    [ratingImageViewTap setNumberOfTapsRequired:1];
+    [ratingImageViewTap setDelegate:self];
+    [ratingImageView addGestureRecognizer:ratingImageViewTap];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,42 +135,14 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-//effetto transizione di uscita
--(void)fadeOut:(UIView*)viewToDissolve withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade Out" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToDissolve.alpha = 0.0;
-    [UIView commitAnimations];
-}
-
-//effetto transizione di entrata
--(void)fadeIn:(UIView*)viewToFadeIn withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade In" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToFadeIn.alpha = 1;
-    [UIView commitAnimations];
-    
-}
 
 - (void)imagePickerController:(UIImagePickerController *) Picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    selectedImage.image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     
+    image = [ImageUtility resizeImage:image];
     
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    selectedImage.image = image;
 }
 
 -(void)selectImageFromGallery{
@@ -183,9 +164,6 @@
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    NSLog(@"richiamato");
-	
      switch (buttonIndex) {
          case 0: [self selectImageFromGallery];
              break;
@@ -193,6 +171,18 @@
              break;
      }
 
+}
+
+/*
+ * GESTIONE RATING POPUP
+ */
+
+-(void)showSendRating{
+    [UIEffects fadeIn:ratingView withDuration:1 andWait:0];
+}
+
+-(void)newRating:(DLStarRatingControl *)control :(float)rating {
+    userRatingChoice = rating;
 }
 
 - (IBAction)takePhotoOrChooseFromLibrary{
@@ -203,7 +193,7 @@
 }
 
 - (IBAction)hideMap:(id)sender {
-    [self fadeOut:mapViewContainer withDuration:1 andWait:0];
+    [UIEffects fadeOut:mapViewContainer withDuration:1 andWait:0];
 }
 
 - (IBAction)getCurrentAddress:(id)sender {
@@ -211,6 +201,27 @@
 }
 
 - (IBAction)showMap:(id)sender {
-    [self fadeIn:mapViewContainer withDuration:1 andWait:0];
+    [UIEffects fadeIn:mapViewContainer withDuration:1 andWait:0];
 }
+
+- (IBAction)hideSendRating:(id)sender {
+    [UIEffects fadeOut:ratingView withDuration:1 andWait:0];
+}
+
+- (IBAction)sendArea:(id)sender {
+    if([addressSelectedTextField.text length] == 0){
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:nil message:@"La posizione dell'area è obbligatoria!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        [alert show];
+        return;
+    }
+    
+    NSString *address = addressSelectedTextField.text;
+    CLLocationCoordinate2D coordinates = searchedLocation.coordinate;
+    int rating = userRatingChoice;
+    NSString *comment = commentTextView.text;
+    NSString *image = [ImageUtility compressAndEncodeImage:selectedImage.image];
+}
+
+
 @end

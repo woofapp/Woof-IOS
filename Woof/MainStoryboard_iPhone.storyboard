@@ -1360,6 +1360,9 @@
                                         <state key="highlighted">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="sendArea:" destination="qQw-bG-7rX" eventType="touchUpInside" id="a3c-jT-sEr"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -1367,6 +1370,73 @@
                                     <constraint firstItem="Th5-m4-Bsm" firstAttribute="leading" secondItem="iXy-2r-PNK" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="baK-Ma-Iv8"/>
                                     <constraint firstItem="Th5-m4-Bsm" firstAttribute="top" secondItem="iXy-2r-PNK" secondAttribute="top" constant="5" id="e3M-xD-5wL"/>
                                     <constraint firstAttribute="trailing" secondItem="Th5-m4-Bsm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="umi-H6-X3M"/>
+                                </constraints>
+                            </view>
+                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YL4-os-4uk">
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-AP-x5g" customClass="DLStarRatingControl">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="fj7-QU-kcY" id="aX8-KR-ka3"/>
+                                        </connections>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TrZ-DC-WTb">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="Gic-72-p03"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Cancella">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="hideSendRating:" destination="qQw-bG-7rX" eventType="touchUpInside" id="xHW-9O-QVX"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZXB-M7-XGk">
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="Jwh-K9-Jaf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Salva">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="sendRating:" destination="fj7-QU-kcY" eventType="touchUpInside" id="JgV-dR-5ds"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Esprimi il tuo parere" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aRa-Qi-JML">
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sGO-kw-e6Z">
+                                        <color key="backgroundColor" red="0.0" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="deviceRGB"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="ZXB-M7-XGk" firstAttribute="top" secondItem="YL4-os-4uk" secondAttribute="top" constant="151" id="4Ro-gS-oAc"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZXB-M7-XGk" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="54M-nk-4jv"/>
+                                    <constraint firstItem="M5c-AP-x5g" firstAttribute="top" secondItem="YL4-os-4uk" secondAttribute="top" constant="70" id="6nH-YW-3r2"/>
+                                    <constraint firstItem="sGO-kw-e6Z" firstAttribute="top" secondItem="aRa-Qi-JML" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="8Cs-my-g2N"/>
+                                    <constraint firstItem="sGO-kw-e6Z" firstAttribute="trailing" secondItem="YL4-os-4uk" secondAttribute="trailing" type="default" id="EGr-SJ-ard"/>
+                                    <constraint firstItem="aRa-Qi-JML" firstAttribute="top" secondItem="YL4-os-4uk" secondAttribute="top" constant="20" symbolic="YES" type="default" id="H0C-eT-DTU"/>
+                                    <constraint firstItem="M5c-AP-x5g" firstAttribute="trailing" secondItem="YL4-os-4uk" secondAttribute="trailing" type="default" id="I7c-dL-5Dz"/>
+                                    <constraint firstAttribute="bottom" secondItem="sGO-kw-e6Z" secondAttribute="bottom" constant="149" id="N5J-lS-mcG"/>
+                                    <constraint firstItem="TrZ-DC-WTb" firstAttribute="leading" secondItem="YL4-os-4uk" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Sug-tY-rfv"/>
+                                    <constraint firstItem="ZXB-M7-XGk" firstAttribute="baseline" secondItem="TrZ-DC-WTb" secondAttribute="baseline" type="default" id="Ylh-9G-nxV"/>
+                                    <constraint firstItem="sGO-kw-e6Z" firstAttribute="leading" secondItem="YL4-os-4uk" secondAttribute="leading" type="default" id="iZr-Hn-LYD"/>
+                                    <constraint firstItem="M5c-AP-x5g" firstAttribute="leading" secondItem="YL4-os-4uk" secondAttribute="leading" type="default" id="oNr-1n-1bA"/>
+                                    <constraint firstItem="M5c-AP-x5g" firstAttribute="centerY" secondItem="YL4-os-4uk" secondAttribute="centerY" type="default" id="tfb-nv-dIF"/>
+                                    <constraint firstItem="aRa-Qi-JML" firstAttribute="leading" secondItem="YL4-os-4uk" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="zKa-74-R9o"/>
                                 </constraints>
                             </view>
                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dmz-df-H53">
@@ -1433,8 +1503,10 @@
                             <constraint firstItem="oU7-h3-Izt" firstAttribute="leading" secondItem="dB9-zT-d4o" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="4Ss-yr-6Ps"/>
                             <constraint firstItem="oU7-h3-Izt" firstAttribute="leading" secondItem="xAg-hp-89y" secondAttribute="leading" type="default" id="588-cD-dyn"/>
                             <constraint firstItem="mDl-cO-bEf" firstAttribute="top" secondItem="QYc-lP-RVf" secondAttribute="top" constant="267" id="5SZ-Rx-wM0"/>
+                            <constraint firstItem="YL4-os-4uk" firstAttribute="centerY" secondItem="QYc-lP-RVf" secondAttribute="centerY" type="default" id="6YQ-Ce-aHx"/>
                             <constraint firstItem="dB9-zT-d4o" firstAttribute="baseline" secondItem="QQl-Qo-28O" secondAttribute="baseline" type="default" id="B9y-wR-3c7"/>
                             <constraint firstItem="ZI7-DK-3JL" firstAttribute="leading" secondItem="QYc-lP-RVf" secondAttribute="leading" type="default" id="Eon-1l-aUO"/>
+                            <constraint firstItem="YL4-os-4uk" firstAttribute="top" secondItem="QYc-lP-RVf" secondAttribute="top" constant="174" id="IWL-Kr-nRE"/>
                             <constraint firstItem="Dmz-df-H53" firstAttribute="trailing" secondItem="QYc-lP-RVf" secondAttribute="trailing" type="default" id="Jne-vU-Upd"/>
                             <constraint firstItem="Dmz-df-H53" firstAttribute="leading" secondItem="QYc-lP-RVf" secondAttribute="leading" type="default" id="K13-lI-DKZ"/>
                             <constraint firstItem="2R2-ek-J3S" firstAttribute="trailing" secondItem="QYc-lP-RVf" secondAttribute="trailing" type="default" id="NwD-EP-cKx"/>
@@ -1452,10 +1524,12 @@
                             <constraint firstAttribute="trailing" secondItem="oU7-h3-Izt" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="czK-Ob-doH"/>
                             <constraint firstItem="iXy-2r-PNK" firstAttribute="trailing" secondItem="QYc-lP-RVf" secondAttribute="trailing" type="default" id="d4L-Qa-Kub"/>
                             <constraint firstItem="eht-be-dbx" firstAttribute="top" secondItem="QYc-lP-RVf" secondAttribute="top" constant="9" id="e2F-Ep-TUr"/>
+                            <constraint firstItem="YL4-os-4uk" firstAttribute="centerX" secondItem="9Lh-tO-t2N" secondAttribute="centerX" type="default" id="fkf-j8-J7J"/>
                             <constraint firstItem="2R2-ek-J3S" firstAttribute="leading" secondItem="QYc-lP-RVf" secondAttribute="leading" type="default" id="fvf-5x-1hl"/>
                             <constraint firstItem="xAg-hp-89y" firstAttribute="leading" secondItem="eht-be-dbx" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="gfk-E8-mnN"/>
                             <constraint firstItem="9Lh-tO-t2N" firstAttribute="leading" secondItem="QYc-lP-RVf" secondAttribute="leading" type="default" id="h9S-Yk-gXk"/>
                             <constraint firstItem="xAg-hp-89y" firstAttribute="trailing" secondItem="QYc-lP-RVf" secondAttribute="trailing" type="default" id="lGa-gb-b4o"/>
+                            <constraint firstItem="YL4-os-4uk" firstAttribute="leading" secondItem="QYc-lP-RVf" secondAttribute="leading" constant="35" id="nxK-fY-ZM4"/>
                             <constraint firstItem="9Lh-tO-t2N" firstAttribute="trailing" secondItem="QYc-lP-RVf" secondAttribute="trailing" type="default" id="pDj-tp-Cex"/>
                             <constraint firstItem="xnt-rO-HCI" firstAttribute="top" secondItem="mDl-cO-bEf" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="qAj-mP-AbD"/>
                             <constraint firstItem="iXy-2r-PNK" firstAttribute="top" secondItem="xnt-rO-HCI" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="rVm-ay-hEQ"/>
@@ -1469,9 +1543,12 @@
                     <navigationItem key="navigationItem" id="BEv-rx-GrM"/>
                     <connections>
                         <outlet property="addressSelectedTextField" destination="QQl-Qo-28O" id="87W-aQ-X0W"/>
+                        <outlet property="commentTextView" destination="xnt-rO-HCI" id="RNT-QP-mX4"/>
                         <outlet property="mapAddressSelectedTextField" destination="M45-n0-tLv" id="tIk-N1-a7o"/>
                         <outlet property="mapView" destination="ywc-8F-lw7" id="4uG-Nz-GPL"/>
                         <outlet property="mapViewContainer" destination="Dmz-df-H53" id="icX-Wz-W5z"/>
+                        <outlet property="ratingImageView" destination="mDl-cO-bEf" id="Uks-W4-icm"/>
+                        <outlet property="ratingView" destination="YL4-os-4uk" id="TVc-it-9tc"/>
                         <outlet property="selectImageMessageContainer" destination="9Lh-tO-t2N" id="rVD-Rj-LhY"/>
                         <outlet property="selectedImage" destination="2R2-ek-J3S" id="4qd-vQ-fbL"/>
                     </connections>
@@ -1562,13 +1639,18 @@
                 <relationship kind="action" name="getCurrentAddress:"/>
                 <relationship kind="action" name="goToHome:"/>
                 <relationship kind="action" name="hideMap:"/>
+                <relationship kind="action" name="hideSendRating:"/>
+                <relationship kind="action" name="sendArea:"/>
                 <relationship kind="action" name="showMap:"/>
                 <relationship kind="action" name="takePhotoOrChooseFromLibrary"/>
                 <relationship kind="outlet" name="addressSelectedTextField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="commentTextView" candidateClass="UITextView"/>
                 <relationship kind="outlet" name="geoCoder" candidateClass="CLGeocoder"/>
                 <relationship kind="outlet" name="mapAddressSelectedTextField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
                 <relationship kind="outlet" name="mapViewContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="ratingImageView" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="ratingView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="selectImageMessageContainer" candidateClass="UIView"/>
                 <relationship kind="outlet" name="selectedImage" candidateClass="UIImageView"/>
             </relationships>
