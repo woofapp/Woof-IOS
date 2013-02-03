@@ -44,7 +44,6 @@
 }
 
 -(void) checkLogin{
-    NSLog(@"Test branch");
     //Check login
     if([DataSource getTokenDefault] == NULL) [UIEffects fadeIn:loginViewContainer withDuration:1 andWait:0];
     else [self switchToHome];
