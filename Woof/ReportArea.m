@@ -143,6 +143,7 @@
     image = [ImageUtility resizeImage:image];
     
     selectedImage.image = image;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)selectImageFromGallery{
