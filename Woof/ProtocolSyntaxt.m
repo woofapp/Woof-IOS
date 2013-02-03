@@ -352,7 +352,7 @@
         dog.idDog = [obj objectForKey:PARAM_IDDOG];
         dog.name = [obj objectForKey:PARAM_NAME];
         dog.race = [obj objectForKey:PARAM_RACE];
-        dog.year = [obj objectForKey:PARAM_YEAR];
+        dog.year = [[obj objectForKey:PARAM_YEAR] intValue];
         
         if(![[obj objectForKey:PARAM_IMAGE] isEqualToString:@"null"]){
             dog.image = [obj objectForKey:PARAM_IMAGE];
