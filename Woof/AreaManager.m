@@ -164,9 +164,12 @@
 }
 
 + (void) insertAreaInDB: (Area*) area{
-   // Database *db = [Database sharedDatabase];
+    Database *db = [Database sharedDatabase];
     
-    //[db insertArea:area];
+    
+    
+    
+    [db insertArea:area];
 }
 
 /*

@@ -19,7 +19,7 @@
     NSDate *date = [weatherInfo objectForKey:@"weatherDate"];
     
     //controllo se sono già state salvate le info e se è passata almeno un'ora
-    if(location != NULL && (weatherInfo.count == 0 || [date timeIntervalSinceNow] >= 3600 || date == NULL)){
+    if(location != NULL && (weatherInfo.count == 0 || [date timeIntervalSinceNow] <= -3600 || date == NULL)){
         
         //scarico le info aggiornate
         NSString *latitude = [[NSString alloc] initWithFormat:@"%f", location.coordinate.latitude];
@@ -167,8 +167,6 @@
 
 +(NSDictionary*) getDefaultWeatherInfo{
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    //NSData *data = [NSData alloc] ini
     
     NSDictionary *weatherInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                                 [defaults stringForKey:@"weatherLocation"], @"weatherLocation",

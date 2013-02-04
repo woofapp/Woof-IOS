@@ -80,10 +80,13 @@
     //controllo aree salvate in locale
     NSArray *areasAr = [AreaManager getAreasFromDB:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
     
+    //Se le aree in locale non sono aggiornate
     if(![AreaManager checkAreas:areasAr inLocation:location andRadius:selectedRadius]){
+        //Scarico nuove versioni
         areasAr = [AreaManager getAreasFrom:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
         
-        //for(Area *area in areasAr)[AreaManager insertAreaInDB:area];
+        //Salvo le aree scaricate nel db locale
+        for(Area *area in areasAr)[AreaManager insertAreaInDB:area];
     }
     
     //visualizzo le aree trovate
@@ -345,17 +348,12 @@
                  }];
 }
 
+
+//Passaggio di parametri prima di effettuare il Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"areaDetailsSegue"]) {
-        
-        // Get destination view
         AreaDetails *vc = [segue destinationViewController];
-        
-        // Get button tag number (or do whatever you need to do here, based on your object
-        //NSInteger tagIndex = [(UIButton *)sender tag];
-        
-        // Pass the information to your destination view
         [vc setArea:selectedArea];
     }
 }

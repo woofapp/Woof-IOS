@@ -127,14 +127,19 @@
 
 - (void) insertArea: (Area *) area{
     
+    //Se l'area è gia presente la elimino
+    FMResultSet *s = [db executeQuery:@"SELECT idArea FROM areas WHERE idArea = %@",area.myIdArea];
+    while([s next]) [db executeUpdate:@"DELETE FROM areas WHERE idArea = %@",area.myIdArea];
+    
+    //Inserimento area
     NSMutableString *insertSQL = [[NSMutableString alloc]initWithFormat:@"INSERT INTO areas (idArea, address, latitude, longitude, version, image) VALUES(%@,'%@','%f',%f, %d,", area.myIdArea, area.myAddress, area.coordinate.latitude, area.coordinate.longitude, area.version];
     
-    if(area.myImages != nil && [area.myImages count] != 0)
-        [insertSQL appendFormat:@"'%@'",[area.myImages objectAtIndex:0]];
-    else
-        [insertSQL appendFormat:@"%@",nil];
+    if(area.myImages != nil && [area.myImages count] != 0) [insertSQL appendFormat:@"'%@'",[area.myImages objectAtIndex:0]];
+    else [insertSQL appendFormat:@"%@",nil];
     
     [insertSQL appendString:@")"];
+    
+    NSLog(@"QUERY: %@",insertSQL);
     
     [db executeUpdate:insertSQL];
 }
