@@ -1627,7 +1627,7 @@
         <image name="downloading_area_image.jpg" width="640" height="360"/>
         <image name="friendsIcon.png" width="90" height="90"/>
         <image name="navBarWallpaper@2.png" width="1" height="42"/>
-        <image name="no_personal_image.png" width="150" height="150"/>
+        <image name="no_personal_image.png" width="16" height="16"/>
         <image name="profile_icon@2.png" width="120" height="120"/>
         <image name="reportIcon.png" width="52" height="79"/>
         <image name="searchIcon.png" width="200" height="200"/>
