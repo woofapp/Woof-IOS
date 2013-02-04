@@ -13,6 +13,7 @@
 #import "AreaCell.h"
 #import "Comment.h"
 #import "AreaDetails.h"
+#import "UIEffects.h"
 
 @interface SearchAreas ()
 
@@ -77,12 +78,15 @@
     searchedLocation = location;
     
     //controllo aree salvate in locale
-    NSArray *areasAr = [AreaManager getAreasFromDB:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
+    NSMutableArray *areasAr = [AreaManager getAreasFromDB:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
     
+    //Se le aree in locale non sono aggiornate
     if(![AreaManager checkAreas:areasAr inLocation:location andRadius:selectedRadius]){
+        //Scarico nuove versioni
         areasAr = [AreaManager getAreasFrom:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
         
-        //for(Area *area in areasAr)[AreaManager insertAreaInDB:area];
+        //Salvo le aree scaricate nel db locale
+        for(Area *area in areasAr)[AreaManager insertAreaInDB:area];
     }
     
     //visualizzo le aree trovate
@@ -143,44 +147,15 @@
 
 - (IBAction)switchView:(id)sender {
     if(tableViewContainer.alpha == 0){
-        [self fadeOut:mapViewContainer withDuration:1 andWait:0];
-        [self fadeIn:tableViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeOut:mapViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeIn:tableViewContainer withDuration:1 andWait:0];
         
     }else if(mapViewContainer.alpha == 0){
-        [self fadeOut:tableViewContainer withDuration:1 andWait:0];
-        [self fadeIn:mapViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeOut:tableViewContainer withDuration:1 andWait:0];
+        [UIEffects fadeIn:mapViewContainer withDuration:1 andWait:0];
         
         [self mapZoomInLocation:searchedLocation];
     }
-}
-
-//effetto transizione di uscita
--(void)fadeOut:(UIView*)viewToDissolve withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade Out" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToDissolve.alpha = 0.0;
-    [UIView commitAnimations];
-}
-
-//effetto transizione di entrata
--(void)fadeIn:(UIView*)viewToFadeIn withDuration:(NSTimeInterval)duration andWait:(NSTimeInterval)wait
-{
-    [UIView beginAnimations: @"Fade In" context:nil];
-    
-    // wait for time before begin
-    [UIView setAnimationDelay:wait];
-    
-    // druation of animation
-    [UIView setAnimationDuration:duration];
-    viewToFadeIn.alpha = 1;
-    [UIView commitAnimations];
-    
 }
 
 /*
@@ -254,14 +229,14 @@
 }
 
 - (IBAction)radiusButtonClicked:(id)sender {
-    [self fadeIn:closePickerButton withDuration:1 andWait:0];
-    [self fadeIn:picker withDuration:1 andWait:0];
+    [UIEffects fadeIn:closePickerButton withDuration:1 andWait:0];
+    [UIEffects fadeIn:picker withDuration:1 andWait:0];
 }
 
 //Chiusura del picker e aggiornamento della scelta
 - (IBAction)closePickerButtonClicked:(id)sender {
-    [self fadeOut:closePickerButton withDuration:1 andWait:0];
-    [self fadeOut:picker withDuration:1 andWait:0];
+    [UIEffects fadeOut:closePickerButton withDuration:1 andWait:0];
+    [UIEffects fadeOut:picker withDuration:1 andWait:0];
     
     if(selectedRadiusString == NULL) selectedRadiusString = @"100m";
     [radiusButton setTitle:selectedRadiusString forState:UIControlStateNormal];
@@ -289,7 +264,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     lastAreaImageCache = [[NSMutableDictionary alloc]init];
+    [self populateLastAreaImageCache:lastAreaImageCache];
     return [areas count];
+}
+
+-(void) populateLastAreaImageCache: (NSMutableDictionary *) cache{
+    for(Area *area in areas)
+        if([area.myImages count] != 0) [cache setObject:[area.myImages objectAtIndex:0] forKey:area.myIdArea];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -373,17 +354,12 @@
                  }];
 }
 
+
+//Passaggio di parametri prima di effettuare il Segue
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"areaDetailsSegue"]) {
-        
-        // Get destination view
         AreaDetails *vc = [segue destinationViewController];
-        
-        // Get button tag number (or do whatever you need to do here, based on your object
-        //NSInteger tagIndex = [(UIButton *)sender tag];
-        
-        // Pass the information to your destination view
         [vc setArea:selectedArea];
     }
 }

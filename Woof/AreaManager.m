@@ -154,7 +154,7 @@
  * DB
  */
 
-+ (NSArray *) getAreasFromDB: (double) latitude andLongitude: (double) longitude andRadius: (int) radius;{
++ (NSMutableArray *) getAreasFromDB: (double) latitude andLongitude: (double) longitude andRadius: (int) radius;{
     
     Database *db = [Database sharedDatabase];
     
@@ -164,9 +164,13 @@
 }
 
 + (void) insertAreaInDB: (Area*) area{
-   // Database *db = [Database sharedDatabase];
-    
-    //[db insertArea:area];
+    Database *db = [Database sharedDatabase];
+    [db insertArea:area];
+}
+
++(void) insertLastImage: (NSString *)image forArea: (int)idArea{
+    Database *db = [Database sharedDatabase];
+    [db insertLastImage:image forArea:idArea];
 }
 
 /*
