@@ -161,7 +161,8 @@
         <!--Navigation Controller-->
         <scene sceneID="NWB-nf-zFf">
             <objects>
-                <navigationController definesPresentationContext="YES" id="0uo-AZ-klG" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" navigationBarHidden="YES" id="0uo-AZ-klG" sceneMemberID="viewController">
+                    <nil key="simulatedTopBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yFs-F3-UFt">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -178,7 +179,7 @@
             <objects>
                 <viewController id="HQY-4k-92U" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T0V-vl-Jtr">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Registrazione" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Ay-o9-Eh0">
@@ -194,10 +195,29 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Ueu-kz-CH4"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <segue destination="9It-p9-Y0y" kind="push" id="7qW-A6-f6m"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o63-Ed-wLX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3" y="-1744"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="gaD-xE-Ywe">
+            <objects>
+                <viewController id="9It-p9-Y0y" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jZo-zf-za4">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="xca-E4-tcJ"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f4k-ea-E3s" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="505" y="-1743"/>
         </scene>
         <!--Search Areas-->
         <scene sceneID="GTs-24-6IB">
