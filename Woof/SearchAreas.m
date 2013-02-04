@@ -78,7 +78,7 @@
     searchedLocation = location;
     
     //controllo aree salvate in locale
-    NSArray *areasAr = [AreaManager getAreasFromDB:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
+    NSMutableArray *areasAr = [AreaManager getAreasFromDB:location.coordinate.latitude andLongitude:location.coordinate.longitude andRadius:selectedRadius];
     
     //Se le aree in locale non sono aggiornate
     if(![AreaManager checkAreas:areasAr inLocation:location andRadius:selectedRadius]){
@@ -264,7 +264,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     lastAreaImageCache = [[NSMutableDictionary alloc]init];
+    [self populateLastAreaImageCache:lastAreaImageCache];
     return [areas count];
+}
+
+-(void) populateLastAreaImageCache: (NSMutableDictionary *) cache{
+    for(Area *area in areas)
+        if([area.myImages count] != 0) [cache setObject:[area.myImages objectAtIndex:0] forKey:area.myIdArea];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

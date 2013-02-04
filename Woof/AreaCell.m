@@ -43,12 +43,14 @@
     
     
     if(![[cache allKeys] containsObject:idArea]){
+        NSLog(@"Scarico immagine per area %@",idArea);
         areaImageView.image = [UIImage imageNamed: @"downloading_area_image.jpg"];
         [self performSelectorInBackground:@selector(downloadLastAreaImage:) withObject:idArea];
     }else if([[cache objectForKey:idArea] isEqualToString:@"defaultAreaImage@2.png"]){
         areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
         
     }else{
+        NSLog(@"Prelevo immagine da cache per area %@",idArea);
         areaImageView.image = [ImageUtility decodeBase64Image:[cache objectForKey:idArea]];
     }
     
@@ -152,13 +154,19 @@
             if(nTryToDownload <=3){
                 nTryToDownload++;
                 [self performSelectorInBackground:@selector(downloadLastAreaImage:) withObject:idArea];
-            }else
+            }else{
+                image = @"defaultAreaImage@2.png";
+                [self.cache setObject:@"defaultAreaImage@2.png" forKey:idArea];
                 areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
+            }
         }
     }else{
+        image = @"defaultAreaImage@2.png";
         [self.cache setObject:@"defaultAreaImage@2.png" forKey:idArea];
         areaImageView.image = [UIImage imageNamed: @"defaultAreaImage@2.png"];
     }
+    
+    [AreaManager insertLastImage:image forArea:[idArea intValue]];
 }
 
 @end

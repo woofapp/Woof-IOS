@@ -112,8 +112,8 @@
 		70F9DD3A16BEE43400380014 /* UIEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 70F9DD3916BEE43400380014 /* UIEffects.m */; };
 		70F9DD3D16BEEFBC00380014 /* currentPositionIcon@2.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F9DD3B16BEEFBC00380014 /* currentPositionIcon@2.png */; };
 		70F9DD3E16BEEFBC00380014 /* worldIcon@2.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F9DD3C16BEEFBC00380014 /* worldIcon@2.png */; };
-		70F9DD4016BFBD5C00380014 /* Woof.sql in Resources */ = {isa = PBXBuildFile; fileRef = 70F9DD3F16BFBD5C00380014 /* Woof.sql */; };
 		70F9DD4216BFBF8900380014 /* no_personal_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 70F9DD4116BFBF8900380014 /* no_personal_image.png */; };
+		70F9DD4416BFC42800380014 /* Woof.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 70F9DD4316BFC42800380014 /* Woof.sqlite */; };
 		B37F311A16BC256000E4C5B5 /* Dog.m in Sources */ = {isa = PBXBuildFile; fileRef = B37F311916BC256000E4C5B5 /* Dog.m */; };
 		B3BDB48916BBFA9900C72992 /* FormValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BDB48816BBFA9900C72992 /* FormValidator.m */; };
 		B3BDB48C16BC0B6200C72992 /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BDB48B16BC0B6200C72992 /* Utility.m */; };
@@ -282,8 +282,8 @@
 		70F9DD3916BEE43400380014 /* UIEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIEffects.m; sourceTree = "<group>"; };
 		70F9DD3B16BEEFBC00380014 /* currentPositionIcon@2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "currentPositionIcon@2.png"; sourceTree = "<group>"; };
 		70F9DD3C16BEEFBC00380014 /* worldIcon@2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "worldIcon@2.png"; sourceTree = "<group>"; };
-		70F9DD3F16BFBD5C00380014 /* Woof.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Woof.sql; path = ../../Woof.sql; sourceTree = "<group>"; };
 		70F9DD4116BFBF8900380014 /* no_personal_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = no_personal_image.png; sourceTree = "<group>"; };
+		70F9DD4316BFC42800380014 /* Woof.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = Woof.sqlite; sourceTree = "<group>"; };
 		B37F311816BC256000E4C5B5 /* Dog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dog.h; sourceTree = "<group>"; };
 		B37F311916BC256000E4C5B5 /* Dog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dog.m; sourceTree = "<group>"; };
 		B3BDB48716BBFA9900C72992 /* FormValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormValidator.h; sourceTree = "<group>"; };
@@ -562,7 +562,7 @@
 		708542A816B3F977005A84ED /* Database */ = {
 			isa = PBXGroup;
 			children = (
-				70F9DD3F16BFBD5C00380014 /* Woof.sql */,
+				70F9DD4316BFC42800380014 /* Woof.sqlite */,
 			);
 			name = Database;
 			sourceTree = "<group>";
@@ -922,8 +922,8 @@
 				708D401C16BEB760006854EB /* star@2x.png in Resources */,
 				70F9DD3D16BEEFBC00380014 /* currentPositionIcon@2.png in Resources */,
 				70F9DD3E16BEEFBC00380014 /* worldIcon@2.png in Resources */,
-				70F9DD4016BFBD5C00380014 /* Woof.sql in Resources */,
 				70F9DD4216BFBF8900380014 /* no_personal_image.png in Resources */,
+				70F9DD4416BFC42800380014 /* Woof.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 @implementation Database
 
 @synthesize dbPath, database, sqlStatement,db;
+@synthesize areasArray, sortedAreasArray;
 
 + (Database *)sharedDatabase
 {
@@ -37,7 +38,7 @@
         NSString *path = [documentsDirectory stringByAppendingPathComponent:@"Woof.sqlite"];
         sharedDatabase.db = [FMDatabase databaseWithPath:path];
         
-        [sharedDatabase.db setLogsErrors:FALSE];
+        [sharedDatabase.db setLogsErrors:TRUE];
         [sharedDatabase.db setTraceExecution:FALSE];
         
         if(![sharedDatabase.db open]){
@@ -58,21 +59,30 @@
  */
 - (void) insertUser: (User *) user{
     
-    NSMutableString *insertSQL = [[NSMutableString alloc]initWithFormat:@"INSERT INTO users (idUser, email, name, surname, city, image) VALUES(%@,'%@','%@','%@',", user.idUser, user.email, user.name, user.surname];
+    NSMutableString *query;
     
-    if(user.city != nil)
-        [insertSQL appendFormat:@"'%@',",user.city];
-    else
-        [insertSQL appendFormat:@"%@,",nil];
+    //Controllo se l'utente esiste già, nel caso lo elimino
+    query = [[NSMutableString alloc]initWithFormat:@"SELECT idUser FROM users WHERE idUser = %d", [user.idUser intValue]];
     
-    if(user.image != nil)
-        [insertSQL appendFormat:@"'%@'",user.image];
-    else
-        [insertSQL appendFormat:@"%@",nil];
+    FMResultSet *s = [db executeQuery:query];
     
-    [insertSQL appendString:@")"];
+    if(s != NULL){
+        query = [[NSMutableString alloc]initWithFormat:@"DELETE FROM users WHERE idUser = %d", [user.idUser intValue]];
+        [db executeUpdate:query];
+    }
     
-    [db executeUpdate:insertSQL];
+    //Inserisco nuovo utente
+    query = [[NSMutableString alloc]initWithFormat:@"INSERT INTO users (idUser, email, name, surname, city, image) VALUES(%@,'%@','%@','%@',", user.idUser, user.email, user.name, user.surname];
+    
+    if(user.city != nil) [query appendFormat:@"'%@',",user.city];
+    else [query appendFormat:@"%@,",nil];
+    
+    if(user.image != nil) [query appendFormat:@"'%@'",user.image];
+    else [query appendFormat:@"%@",nil];
+    
+    [query appendString:@")"];
+    
+    [db executeUpdate:query];
     
 }
 
@@ -126,30 +136,39 @@
  */
 
 - (void) insertArea: (Area *) area{
+    NSMutableString *query;
     
     //Se l'area è gia presente la elimino
-    FMResultSet *s = [db executeQuery:@"SELECT idArea FROM areas WHERE idArea = %@",area.myIdArea];
-    while([s next]) [db executeUpdate:@"DELETE FROM areas WHERE idArea = %@",area.myIdArea];
+    query = [[NSMutableString alloc]initWithFormat:@"SELECT idArea FROM areas WHERE idArea = %d", [area.myIdArea intValue]];
+    
+    FMResultSet *s = [db executeQuery:query];
+    if(s != NULL){
+        query = [[NSMutableString alloc]initWithFormat:@"DELETE FROM areas WHERE idArea = %d", [area.myIdArea intValue]];
+        [db executeUpdate:query];
+    }
     
     //Inserimento area
-    NSMutableString *insertSQL = [[NSMutableString alloc]initWithFormat:@"INSERT INTO areas (idArea, address, latitude, longitude, version, image) VALUES(%@,'%@','%f',%f, %d,", area.myIdArea, area.myAddress, area.coordinate.latitude, area.coordinate.longitude, area.version];
+    query = [[NSMutableString alloc]initWithFormat:@"INSERT INTO areas (idArea, address, latitude, longitude, version, rating, nRating, image) VALUES(%@,'%@',%f,%f, %d, %f, %d,", area.myIdArea, area.myAddress, area.coordinate.latitude, area.coordinate.longitude, area.version, area.myRating, area.myNRating];
     
-    if(area.myImages != nil && [area.myImages count] != 0) [insertSQL appendFormat:@"'%@'",[area.myImages objectAtIndex:0]];
-    else [insertSQL appendFormat:@"%@",nil];
+    if(area.myImages != nil && [area.myImages count] != 0) [query appendFormat:@"'%@'",[area.myImages objectAtIndex:0]];
+    else [query appendFormat:@"%@",nil];
     
-    [insertSQL appendString:@")"];
+    [query appendString:@")"];
     
-    NSLog(@"QUERY: %@",insertSQL);
+    if([area.myComments count] != 0){
+        //Inserisco utente
+        Comment *comment = area.myComments[0];
+        [self insertUser:comment.user];
+        [self insertComment:comment forArea:area.myIdArea];
+    }
     
-    [db executeUpdate:insertSQL];
+    [db executeUpdate:query];
 }
 
-- (NSArray *) getAreas: (CLLocation *)location andRadius: (int) radius{
-    
-    NSMutableArray *areaArray = nil;
+- (NSMutableArray *) getAreas: (CLLocation *)location andRadius: (int) radius{
     
     FMResultSet *rs = [db executeQuery:@"SELECT * from areas"];
-    
+    areasArray = [[NSMutableArray alloc]init];
     while([rs next]){
         
         double lat = [rs doubleForColumn:@"latitude"];
@@ -161,25 +180,51 @@
         
         if(distance <= radius){
             
-            if(areaArray == nil)
-                areaArray = [[NSMutableArray alloc]init];
-            
             Area *area = [[Area alloc]init];
             
             area.myIdArea = [rs stringForColumn:@"idArea"];
             area.myAddress = [rs stringForColumn:@"address"];
             area.version = [rs intForColumn:@"version"];
+            area.myRating = [rs doubleForColumn:@"rating"];
+            area.myNRating = [rs intForColumn:@"nRating"];
+            
             area.coordinate = coord.coordinate;
             
             NSString *img = [rs stringForColumn:@"image"];
             area.myImages = [[NSArray alloc] initWithObjects:img, nil];
             
-            [areaArray addObject:area];
+            area.myDistance = distance;
+            
+            //Ultimo commento
+            Comment *comment = [self getComment:area.myIdArea];
+            if(comment != nil){
+                NSArray *commentArray = [[NSArray alloc]initWithObjects:comment, nil];
+                area.myComments = commentArray;
+            }
+            
+            [areasArray addObject:area];
         }
     }
     
-    return areaArray;
+    sortedAreasArray = [[NSArray alloc]init];
+    sortedAreasArray = [areasArray sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSMutableArray *arr = [[NSMutableArray alloc] initWithArray:sortedAreasArray];
+    
+    return arr;
 }
+
+/*
+ * IMAGES
+ */
+- (void) insertLastImage: (NSString *)image forArea: (int)idArea{
+    if(image != NULL){
+        NSMutableString *query = [[NSMutableString alloc]initWithFormat:@"UPDATE areas SET image = '%@' WHERE idArea = %d", image, idArea];
+    
+        [db executeUpdate:query];
+    }
+}
+
 
 /*
  * DOGS
@@ -257,6 +302,47 @@
     NSLog(@"count: %d", count);
     return [rs columnCount];
 }
+
+/*
+ * COMMENTS
+ */
+-(void) insertComment:(Comment*)comment forArea: (NSString *)idArea{
     
+    NSMutableString *query;
+    
+    //Controllo se il commento esiste già, nel caso lo elimino
+    query = [[NSMutableString alloc]initWithFormat:@"SELECT idComment FROM comments WHERE idUser = %d AND idArea = %d AND comment = '%@' AND date = '%@'", [comment.user.idUser intValue], [idArea intValue], comment.text, comment.date];
+    
+    FMResultSet *s = [db executeQuery:query];
+    
+    if(s != NULL){
+        int idComment = [s intForColumn:@"idComment"];
+        query = [[NSMutableString alloc]initWithFormat:@"DELETE FROM comments WHERE idComment = %d", idComment];
+        [db executeUpdate:query];
+    }
+    
+    
+    query = [[NSMutableString alloc]initWithFormat:@"INSERT INTO comments (idUser, idArea, comment, date) VALUES(%@, %@, '%@', '%@')", comment.user.idUser, idArea, comment.text, comment.date];
+    [db executeUpdate:query];
+}
+
+-(Comment *)getComment:(NSString *)idArea{
+    
+    NSMutableString *selectSQL = [[NSMutableString alloc]initWithFormat:@"SELECT idUser,comment,date FROM comments WHERE idArea = %@", idArea];
+    FMResultSet *rs = [db executeQuery:selectSQL];
+    
+    Comment *comment = nil;
+    while([rs next]){
+        
+        comment = [[Comment alloc]init];
+        
+        comment.user = [self getUserWithId:[rs stringForColumn:@"idUser"]];
+        comment.text = [rs stringForColumn:@"comment"];
+        comment.date = [rs stringForColumn:@"date"];
+    }
+    
+    return comment;
+}
+
 
 @end
