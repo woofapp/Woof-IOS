@@ -295,6 +295,7 @@
     FMResultSet *rs = [db executeQuery:selectSQL];
     [rs next];
     return [rs intForColumn:@"count"];
+<<<<<<< HEAD
 }
 
 /*
@@ -318,6 +319,8 @@
     
     query = [[NSMutableString alloc]initWithFormat:@"INSERT INTO comments (idUser, idArea, comment, date) VALUES(%@, %@, '%@', '%@')", comment.user.idUser, idArea, comment.text, comment.date];
     [db executeUpdate:query];
+=======
+>>>>>>> niko
 }
 
 -(Comment *)getComment:(NSString *)idArea{

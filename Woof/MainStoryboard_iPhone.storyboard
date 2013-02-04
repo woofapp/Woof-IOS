@@ -197,11 +197,17 @@
                     <navigationItem key="navigationItem" id="Ueu-kz-CH4"/>
                     <nil key="simulatedTopBarMetrics"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                     <connections>
                         <segue destination="9It-p9-Y0y" kind="push" id="7qW-A6-f6m"/>
                     </connections>
 >>>>>>> preMerge
+=======
+                    <connections>
+                        <segue destination="9It-p9-Y0y" kind="push" id="7qW-A6-f6m"/>
+                    </connections>
+>>>>>>> niko
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o63-Ed-wLX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
